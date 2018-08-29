@@ -132,7 +132,7 @@ def plot_feature_importances(model, data):
 
     feature_matrixT = feature_matrix.T.sort_values(0, ascending=False)
 
-    plt.figure(figsize=(12,9))
+    plt.figure(figsize=(12,20))
     plt.barh(feature_matrixT.index[::-1], feature_matrixT[0].values[::-1]);
 
 def plot_prescribing_characteristics():
