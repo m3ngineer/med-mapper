@@ -86,6 +86,8 @@ CREATE TABLE partd_prescrib
 
 \copy partd_prescrib (npi,nppes_provider_last_org_name,nppes_provider_first_name,nppes_provider_city,nppes_provider_state,specialty_description,description_flag,drug_name,generic_name,bene_count,total_claim_count,total_30_day_fill_count,total_day_supply,total_drug_cost,bene_count_ge65,bene_count_ge65_suppress_flag,total_claim_count_ge65,ge65_suppress_flag,total_30_day_fill_count_ge65,total_day_supply_ge65,total_drug_cost_ge65) FROM 'CMS_PartD_Prescriber_NPI_Drug_CY2016_noHeader.txt' WITH (FORMAT text);
 
+\copy partd_prescrib (col_name1, col_name2, col_name3) FROM 'CMS_PartD_Prescriber_NPI_Drug_CY2016_noHeader.txt' WITH (FORMAT text);
+
 CREATE TABLE partd_npi_summ (npi serial,
   nppes_provider_last_org_name varchar,
   nppes_provider_first_name varchar,
