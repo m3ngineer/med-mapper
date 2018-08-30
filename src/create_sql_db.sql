@@ -46,7 +46,7 @@ CREATE TABLE partb_util
 );
 
 # import text file into table
-\copy partb_util (NPI, NPPES_PROVIDER_LAST_ORG_NAME, NPPES_PROVIDER_FIRST_NAME,
+\copy partb_util_15 (NPI, NPPES_PROVIDER_LAST_ORG_NAME, NPPES_PROVIDER_FIRST_NAME,
   NPPES_PROVIDER_MI, NPPES_CREDENTIALS, NPPES_PROVIDER_GENDER, NPPES_ENTITY_CODE,
   NPPES_PROVIDER_STREET1, NPPES_PROVIDER_STREET2, NPPES_PROVIDER_CITY,
   NPPES_PROVIDER_ZIP, NPPES_PROVIDER_STATE, NPPES_PROVIDER_COUNTRY,PROVIDER_TYPE,
@@ -54,14 +54,14 @@ CREATE TABLE partb_util
   HCPCS_DESCRIPTION, HCPCS_DRUG_INDICATOR, LINE_SRVC_CNT, BENE_UNIQUE_CNT,
   BENE_DAY_SRVC_CNT, AVERAGE_MEDICARE_ALLOWED_AMT, AVERAGE_SUBMITTED_CHRG_AMT,
   AVERAGE_MEDICARE_PAYMENT_AMT, AVERAGE_MEDICARE_STANDARD_AMT)
-FROM 'CMS_PartB_Provider_Util_Payment_CY2016_noHeader.txt' WITH (FORMAT text);
+FROM 'CMS_PartB_Provider_Util_Payment_15_noHeader.txt' WITH (FORMAT text);
 
 # import text file into table
-\copy partb_util (NPI, NPPES_PROVIDER_LAST_ORG_NAME, NPPES_PROVIDER_FIRST_NAME,                                                                   NPPES_PROVIDER_MI, NPPES_CREDENTIALS, NPPES_PROVIDER_GENDER, NPPES_ENTITY_CODE,                                                                       NPPES_PROVIDER_STREET1, NPPES_PROVIDER_STREET2, NPPES_PROVIDER_CITY,                                                                                  NPPES_PROVIDER_ZIP, NPPES_PROVIDER_STATE, NPPES_PROVIDER_COUNTRY,                                                                                     PROVIDER_TYPE, MEDICARE_PARTICIPATION_INDICATOR, PLACE_OF_SERVICE, HCPCS_CODE,                                                                        HCPCS_DESCRIPTION, HCPCS_DRUG_INDICATOR, LINE_SRVC_CNT, BENE_UNIQUE_CNT,                                                                              BENE_DAY_SRVC_CNT, AVERAGE_MEDICARE_ALLOWED_AMT, AVERAGE_SUBMITTED_CHRG_AMT,                                                                          AVERAGE_MEDICARE_PAYMENT_AMT, AVERAGE_MEDICARE_STANDARD_AMT)                                                                                        FROM 'CMS_PartB_Provider_Util_Payment_CY2016_noHeader.txt' WITH (FORMAT text);
+\copy partb_util_15 (NPI, NPPES_PROVIDER_LAST_ORG_NAME, NPPES_PROVIDER_FIRST_NAME,                                                                   NPPES_PROVIDER_MI, NPPES_CREDENTIALS, NPPES_PROVIDER_GENDER, NPPES_ENTITY_CODE,                                                                       NPPES_PROVIDER_STREET1, NPPES_PROVIDER_STREET2, NPPES_PROVIDER_CITY,                                                                                  NPPES_PROVIDER_ZIP, NPPES_PROVIDER_STATE, NPPES_PROVIDER_COUNTRY,                                                                                     PROVIDER_TYPE, MEDICARE_PARTICIPATION_INDICATOR, PLACE_OF_SERVICE, HCPCS_CODE,                                                                        HCPCS_DESCRIPTION, HCPCS_DRUG_INDICATOR, LINE_SRVC_CNT, BENE_UNIQUE_CNT,                                                                              BENE_DAY_SRVC_CNT, AVERAGE_MEDICARE_ALLOWED_AMT, AVERAGE_SUBMITTED_CHRG_AMT,                                                                          AVERAGE_MEDICARE_PAYMENT_AMT, AVERAGE_MEDICARE_STANDARD_AMT)                                                                                        FROM 'data/CMS_PartB_Provider_Util_Payment_15_noHeader.txt' WITH (FORMAT text);
 
 
 CREATE TABLE partd_prescrib
-(npi serial,
+(npi varchar,
   nppes_provider_last_org_name varchar,
   nppes_provider_first_name varchar,
   nppes_provider_city varchar,
@@ -71,10 +71,10 @@ CREATE TABLE partd_prescrib
   drug_name varchar,
   generic_name varchar,
   bene_count varchar,
-  total_claim_count float,
-  total_30_day_fill_count float,
-  total_day_supply float,
-  total_drug_cost float,
+  total_claim_count varchar,
+  total_30_day_fill_count varchar,
+  total_day_supply varchar,
+  total_drug_cost varchar,
   bene_count_ge65 varchar,
   bene_count_ge65_suppress_flag varchar,
   total_claim_count_ge65 varchar,
@@ -84,9 +84,7 @@ CREATE TABLE partd_prescrib
   total_drug_cost_ge65 varchar
 );
 
-\copy partd_prescrib (npi,nppes_provider_last_org_name,nppes_provider_first_name,nppes_provider_city,nppes_provider_state,specialty_description,description_flag,drug_name,generic_name,bene_count,total_claim_count,total_30_day_fill_count,total_day_supply,total_drug_cost,bene_count_ge65,bene_count_ge65_suppress_flag,total_claim_count_ge65,ge65_suppress_flag,total_30_day_fill_count_ge65,total_day_supply_ge65,total_drug_cost_ge65) FROM 'CMS_PartD_Prescriber_NPI_Drug_CY2016_noHeader.txt' WITH (FORMAT text);
-
-\copy partd_prescrib (col_name1, col_name2, col_name3) FROM 'CMS_PartD_Prescriber_NPI_Drug_CY2016_noHeader.txt' WITH (FORMAT text);
+\copy partd_prescrib_15 (npi,nppes_provider_last_org_name,nppes_provider_first_name,nppes_provider_city,nppes_provider_state,specialty_description,description_flag,drug_name,generic_name,bene_count,total_claim_count,total_30_day_fill_count,total_day_supply,total_drug_cost,bene_count_ge65,bene_count_ge65_suppress_flag,total_claim_count_ge65,ge65_suppress_flag,total_30_day_fill_count_ge65,total_day_supply_ge65,total_drug_cost_ge65) FROM 'data/CMS_PartD_Prescriber_NPI_Drug_15_noHeader.txt' WITH (FORMAT text);
 
 CREATE TABLE partd_npi_summ (npi serial,
   nppes_provider_last_org_name varchar,
@@ -174,10 +172,16 @@ CREATE TABLE partd_npi_summ (npi serial,
   beneficiary_average_risk_score varchar
 );
 
-\copy partd_npi_summ (npi, nppes_provider_last_org_name, nppes_provider_first_name, nppes_provider_mi, nppes_credentials, nppes_provider_gender, nppes_entity_code, nppes_provider_street1, nppes_provider_street2, nppes_provider_city, nppes_provider_zip5, nppes_provider_zip4, nppes_provider_state, nppes_provider_country, specialty_description, description_flag, medicare_prvdr_enroll_status, total_claim_count, total_30_day_fill_count, total_drug_cost, total_day_supply, bene_count, ge65_suppress_flag, total_claim_count_ge65, total_30_day_fill_count_ge65, total_drug_cost_ge65, total_day_supply_ge65, bene_count_ge65_suppress_flag, bene_count_ge65, brand_suppress_flag, brand_claim_count, brand_drug_cost, generic_suppress_flag, generic_claim_count, generic_drug_cost, other_suppress_flag, other_claim_count, other_drug_cost, mapd_suppress_flag, mapd_claim_count, mapd_drug_cost, pdp_suppress_flag, pdp_claim_count, pdp_drug_cost, lis_suppress_flag, lis_claim_count, lis_drug_cost, nonlis_suppress_flag, nonlis_claim_count, nonlis_drug_cost, opioid_claim_count, opioid_drug_cost, opioid_day_supply, opioid_bene_count, opioid_prescriber_rate, er_opioid_claim_count, er_opioid_drug_cost, er_opioid_day_supply, er_opioid_bene_count, er_opioid_prescriber_rate, antibiotic_claim_count, antibiotic_drug_cost, antibiotic_bene_count, antipsych_ge65_suppress_flag, antipsych_claim_count_ge65, antipsych_drug_cost_ge65, antipsych_bene_ge65_suppress_flg, antipsych_bene_count_ge65, average_age_of_beneficiaries, beneficiary_age_less_65_count, beneficiary_age_65_74_count, beneficiary_age_75_84_count, beneficiary_age_greater_84_count, beneficiary_female_count, beneficiary_male_count, beneficiary_race_white_count, beneficiary_race_black_count, beneficiary_race_asian_pi_count, beneficiary_race_hispanic_count, beneficiary_race_nat_ind_count, beneficiary_race_other_count, beneficiary_nondual_count, beneficiary_dual_count, beneficiary_average_risk_score) FROM 'PartD_Prescriber_PUF_NPI_16_noHeader.txt' WITH (FORMAT text);
+\copy partd_npi_summ_15 (npi, nppes_provider_last_org_name, nppes_provider_first_name, nppes_provider_mi, nppes_credentials, nppes_provider_gender, nppes_entity_code, nppes_provider_street1, nppes_provider_street2, nppes_provider_city, nppes_provider_zip5, nppes_provider_zip4, nppes_provider_state, nppes_provider_country, specialty_description, description_flag, medicare_prvdr_enroll_status, total_claim_count, total_30_day_fill_count, total_drug_cost, total_day_supply, bene_count, ge65_suppress_flag, total_claim_count_ge65, total_30_day_fill_count_ge65, total_drug_cost_ge65, total_day_supply_ge65, bene_count_ge65_suppress_flag, bene_count_ge65, brand_suppress_flag, brand_claim_count, brand_drug_cost, generic_suppress_flag, generic_claim_count, generic_drug_cost, other_suppress_flag, other_claim_count, other_drug_cost, mapd_suppress_flag, mapd_claim_count, mapd_drug_cost, pdp_suppress_flag, pdp_claim_count, pdp_drug_cost, lis_suppress_flag, lis_claim_count, lis_drug_cost, nonlis_suppress_flag, nonlis_claim_count, nonlis_drug_cost, opioid_claim_count, opioid_drug_cost, opioid_day_supply, opioid_bene_count, opioid_prescriber_rate, er_opioid_claim_count, er_opioid_drug_cost, er_opioid_day_supply, er_opioid_bene_count, er_opioid_prescriber_rate, antibiotic_claim_count, antibiotic_drug_cost, antibiotic_bene_count, antipsych_ge65_suppress_flag, antipsych_claim_count_ge65, antipsych_drug_cost_ge65, antipsych_bene_ge65_suppress_flg, antipsych_bene_count_ge65, average_age_of_beneficiaries, beneficiary_age_less_65_count, beneficiary_age_65_74_count, beneficiary_age_75_84_count, beneficiary_age_greater_84_count, beneficiary_female_count, beneficiary_male_count, beneficiary_race_white_count, beneficiary_race_black_count, beneficiary_race_asian_pi_count, beneficiary_race_hispanic_count, beneficiary_race_nat_ind_count, beneficiary_race_other_count, beneficiary_nondual_count, beneficiary_dual_count, beneficiary_average_risk_score) FROM 'data/CMS_PartD_Prescriber_NPI_Summ_15_noHeader.txt' WITH (FORMAT text);
 
 # select imbruvica prescription information merged with NPI summary table
 SELECT * FROM partd_prescrib JOIN partd_npi_summ ON partd_prescrib.npi=partd_npi_summ.npi WHERE drug_name='IMBRUVICA';
 
 # copy selection to csv file
 \copy (SELECT * FROM partd_prescrib LEFT JOIN partd_npi_summ ON partd_prescrib.npi=partd_npi_summ.npi WHERE drug_name='IMBRUVICA') TO 'imbruvica_prescrib_npi_summary.txt' DELIMITER E'\t';
+
+\copy (SELECT * FROM partd_prescrib_14 LEFT JOIN partd_npi_summ_14 ON partd_prescrib_14.npi=partd_npi_summ_14.npi WHERE specialty_description='HEMATOLOGY-ONCOLOGY') TO 'heme-onc_d_14.txt' DELIMITER E'\t';
+
+# Alter table names
+ALTER TABLE partd_prescrib
+RENAME TO partd_prescrib_16;
