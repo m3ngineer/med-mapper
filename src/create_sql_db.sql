@@ -86,7 +86,7 @@ CREATE TABLE partd_prescrib
 
 \copy partd_prescrib_15 (npi,nppes_provider_last_org_name,nppes_provider_first_name,nppes_provider_city,nppes_provider_state,specialty_description,description_flag,drug_name,generic_name,bene_count,total_claim_count,total_30_day_fill_count,total_day_supply,total_drug_cost,bene_count_ge65,bene_count_ge65_suppress_flag,total_claim_count_ge65,ge65_suppress_flag,total_30_day_fill_count_ge65,total_day_supply_ge65,total_drug_cost_ge65) FROM 'data/CMS_PartD_Prescriber_NPI_Drug_15_noHeader.txt' WITH (FORMAT text);
 
-CREATE TABLE partd_npi_summ (npi serial,
+CREATE TABLE partd_npi_summ_15 (npi varchar,
   nppes_provider_last_org_name varchar,
   nppes_provider_first_name varchar,
   nppes_provider_mi varchar,
@@ -180,7 +180,7 @@ SELECT * FROM partd_prescrib JOIN partd_npi_summ ON partd_prescrib.npi=partd_npi
 # copy selection to csv file
 \copy (SELECT * FROM partd_prescrib LEFT JOIN partd_npi_summ ON partd_prescrib.npi=partd_npi_summ.npi WHERE drug_name='IMBRUVICA') TO 'imbruvica_prescrib_npi_summary.txt' DELIMITER E'\t';
 
-\copy (SELECT * FROM partd_prescrib_14 LEFT JOIN partd_npi_summ_14 ON partd_prescrib_14.npi=partd_npi_summ_14.npi WHERE specialty_description='HEMATOLOGY-ONCOLOGY') TO 'heme-onc_d_14.txt' DELIMITER E'\t';
+\copy (SELECT * FROM partd_prescrib_16 LEFT JOIN partd_npi_summ_16 ON partd_prescrib_16.npi=partd_npi_summ_16.npi WHERE partd_prescrib_16.specialty_description='Hematology/Oncology' OR partd_prescrib_16.specialty_description='Medical Oncology' OR partd_prescrib_16.specialty_description='Hematology' OR partd_prescrib_16.specialty_description='Hematology-Oncology') TO 'data/heme-onc_d_16.csv' CSV HEADER DELIMITER E'\t';
 
 # Alter table names
 ALTER TABLE partd_prescrib
