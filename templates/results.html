@@ -46,12 +46,14 @@
           background-repeat: no-repeat;
           background-position: 100% 100%;
         }
-
+        #prescriber-info thead tr th.header span {
+          background-image: url('static/img/asc-desc.gif');
+        }
         #prescriber-info thead tr th.headerSortUp span {
-          background-image: url('static/img/up-arrow.png');
+          background-image: url('static/img/asc.gif');
         }
         #prescriber-info thead tr th.headerSortDown span {
-          background-image: url('static/img/down-arrow.png');
+          background-image: url('static/img/desc.gif');
         }
 
         </style>
@@ -117,13 +119,12 @@
 
               </div>
 
-              <div id='chart' class='chart'>
-              </div>
+              <!--<div id='chart' class='chart'></div>-->
 
               <div class="section section-presentation">
                   <div class="container">
                       <div class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-5">
                               <div class="description">
                                   <h4 class="header-text">Cohort Statistics</h4>
                                   <p>Altogether, this cohort had:  </p>
@@ -137,9 +138,12 @@
                                   <h3>{{ cohort_stats[1][1] }}%</h3> of all Medicare spending on {{ selection }}<br>
                               </div>
                           </div>
-                          <div class="col-md-5 col-md-offset-1 hidden-xs">
-                              <!-- add a plot here -->
-                          </div>
+                          <div class="col-md-7 hidden-xs">
+                                <div class="description">
+                                <!-- map plot is here -->
+                                <h4 class="header-text">Prescriber Locations</h4>
+                                <div id='chart'></div>
+                              </div>
                       </div>
                   </div>
               </div>
@@ -179,11 +183,13 @@
 
         Plotly.plot('chart',
           graphs.data,
-          graphs.layout || {});
+          graphs.layout, {displayModeBar: false, scrollZoom: false});
 
           $(document).ready(function()
             {
-                $("#prescriber-info").tablesorter({sortList: [7,0]});
+                $("#prescriber-info").tablesorter({
+                  sortList: [[7,1]] // sort column 7, descending (1)
+                });
             }
           );
 
