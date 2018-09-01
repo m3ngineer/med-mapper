@@ -13,14 +13,22 @@ def create_zipcode_df(hp_dict):
 
     lats = []
     longs = []
+    zips = []
+    names = []
+    npis = []
+    names_zips = []
 
     search = ZipcodeSearchEngine()
 
     for npi in hp_dict:
         lats.append(search.by_zipcode(hp_dict[npi]['zip']).Latitude)
         longs.append(search.by_zipcode(hp_dict[npi]['zip']).Longitude)
+        zips.append(hp_dict[npi]['zip'])
+        npis.append(npi)
+        names.append(hp_dict[npi]['last_name'] + ', ' + hp_dict[npi]['first_name'])
+        names_zips.append(hp_dict[npi]['last_name'] + ', ' + hp_dict[npi]['first_name'] + ', ' + str(hp_dict[npi]['zip']))
 
-    zipcode_df = pd.DataFrame({'latitude': lats, 'longitude': longs})
+    zipcode_df = pd.DataFrame({'npi': npis, 'name': names, 'zip': zips, 'name_zip': names_zips, 'latitude': lats, 'longitude': longs})
 
     return zipcode_df
 
@@ -38,6 +46,9 @@ def show_map(hp_dict):
             lat = zipcode_df['latitude'],
             #text = df['text'],
             mode = 'markers',
+            ids=zipcode_df['zip'],
+            text=zipcode_df['name_zip'],
+            hoverinfo='text',
             marker = dict(
                 size = 8,
                 opacity = 0.6,
@@ -51,8 +62,19 @@ def show_map(hp_dict):
             )]
 
     layout = dict(
-            title = 'Locations of Predicted Physicians for Imbruvica',
-            colorbar = True,
+            #title = 'Locations of Predicted Physicians for Imbruvica',
+            colorbar = False,
+            autosize=True,
+            width=500,
+            height=300,
+            margin = dict(
+                l=5,
+                r=5,
+                b=0,
+                t=0,
+                pad=0
+            ),
+            displayModeBar = False,
             xaxis = dict(
                 fixedrange = True
                 ),
@@ -93,13 +115,13 @@ def get_cohort_stats(high_prob_npis, medicare_data):
     # find summary percent greater statistics than mean
     hp_target_means = high_prescribers_target[['total_claim_count', 'nonlis_drug_cost', 'pdp_drug_cost', 'mapd_drug_cost', 'brand_drug_cost', 'generic_drug_cost', 'total_drug_cost']].mean()
     ap_target_means = all_prescribers_target[['total_claim_count', 'nonlis_drug_cost', 'pdp_drug_cost', 'mapd_drug_cost', 'brand_drug_cost', 'generic_drug_cost', 'total_drug_cost']].mean()
-    stats = (hp_target_means - ap_target_means) / ap_target_means * 100
+    stats = ((hp_target_means - ap_target_means) / ap_target_means * 100).round(1)
     cohort_stats.append(stats)
 
     # find summary statistics on percentage of total_claims and total_drug_costs for drug that these physicians made
     hp_target_sums = high_prescribers_target[['total_claim_count', 'nonlis_drug_cost', 'pdp_drug_cost', 'mapd_drug_cost', 'brand_drug_cost', 'generic_drug_cost', 'total_drug_cost']].sum()
     ap_target_sums = all_prescribers_target[['total_claim_count', 'nonlis_drug_cost', 'pdp_drug_cost', 'mapd_drug_cost', 'brand_drug_cost', 'generic_drug_cost', 'total_drug_cost']].sum()
-    stats = (hp_target_sums/ap_target_sums * 100)[['total_claim_count', 'total_drug_cost']]
+    stats = (hp_target_sums/ap_target_sums * 100)[['total_claim_count', 'total_drug_cost']].round(2)
     cohort_stats.append(stats)
 
     return cohort_stats

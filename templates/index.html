@@ -54,7 +54,7 @@
                                 <!-- image <img class="phone" src="static/assets/img/template/iphone3.png" style="margin-top: 20px"/> -->
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-offset-1">
+                        <div class="col-md-6 col-md-offset-1">
                             <div class="description">
                                 <h2>med mappr</h2>
                                 <br>
@@ -81,33 +81,34 @@
                 <div class="container text-center">
                     <h4 class="header-text">Find a physician's prescribing DNA</h4>
                     <p>
-                      capturing the current physician landscape and predicting the future marketplace
+                      Understanding the best way to utilize your sales force is crucial to maintaining market stature. With publicly-available data, med mappr can profile a physician's prescribing DNA and analyzes the drug marketplace to identify the best touchpoints and opportunities for your sales force to engage with physicians.
                     </p>
-                        <ul style="width: 70%; margin: auto;">
-
-                          <li>How much are competitors already reaching this physician?</li>
-                          <li>How readily does a physician adopt new drugs in place of more established ones?</li>
-                          <li>Determine how demographics influence prescribing behavior</li>
-
-                        </ul>
-
+                    <p>
+                      We seek to answer some of these questions:
+                      <ul style="width: 70%; margin: auto; text-align: left; line-height: 28px; font-size: 18px; font-weight: 200;">
+                        <li>How much are competitors already reaching this physician?</li>
+                        <li>How readily does a physician adopt new drugs in place of more established ones?</li>
+                        <li>Determine how demographics influence prescribing behavior</li>
+                      </ul>
+                    </p>
 
                 </div>
             </div>
             <div class="section section-presentation">
                 <div class="container">
-                    <div class="row" style="border: 1px solid black;">
-                        <div style="background-color: red;" class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="description">
-                                <h4 class="header-text">About this data</h4>
-                                <p>And your app is also probably social, awesome, easy-to-use and vital to users. This is the place to enlist all the good things that your app has to share. Focus on the benefits that the uers will receive. Try to combine imaginery with text and show meaningful printscreens from your app, that will make it clear what exactly the basic functions are. </p>
+                                <h4 class="header-text">Analysis of Oncology Prescribing Behavior</h4>
+                                <p>This project focuses on predicting top-prescribing physicians for oncology drugs. Using Imbruvica, an oral inhibitor of Bruton's tyrosine kinase for treatment of mantel cell lymphoma and chronic lymphocytic leukemia, I analyzed Medicare claims data to build a gradient boosted classifier model that predicts whether a physician will be a top prescriber in the following year.</p>
                                 <p>Try to make it very clear for the people browsing the page that this product will enrich their life and will make a nice addition to the homescreen.
                                 <p>
                             </div>
                         </div>
-                        <div style="background-color: blue; height:200px;" class="col-md-7 hidden-xs">
+                        <div class="col-md-5 hidden-xs">
                             <!-- add a plot here -->
-                            hhi
+                            <img src='static/img/total_claims_imbr.png' style='position: relative; top: 130px; left: 100px; width: 300px; height: 300px;'>
+
                         </div>
                     </div>
                 </div>
@@ -118,12 +119,18 @@
                         <div class="col-md-6">
 
                           <!-- add a plot here -->
+                          <img src='static/img/total_claims_imbr.png' style='position: relative; top: 0px; left: 100px; width: 300px; height: 300px;'>
 
                         </div>
                         <div class="col-md-5 col-md-offset-1">
-                            <h4 class="header-text">Easy to integrate</h4>
+                            <h4 class="header-text">Interesting features</h4>
                             <p>
-                                With all the apps that users love! Make it easy for users to share, like, post and tweet their favourite things from the app. Be sure to let users know they continue to remain connected while using your app!
+                                Variation of prescribing patterns by state
+                                Hierarchical clustering of provider prescribing patterns
+                                t-SNE plots of
+                                Heatmap of prescribing patterns
+                                create matrix of npis x claims per drug
+                                set claims < 11 --> 0
                             </p>
                             <a href="http://www.creative-tim.com/product/awesome-landing-page" id="Demo3" class="btn btn-fill btn-info" data-button="info">Get Free Demo</a>
                         </div>
