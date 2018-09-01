@@ -401,7 +401,7 @@ a:focus, a:active {
 }
 
 .btn-group.select {
-  <!--width: 100%;-->
+  width: 100%;
 }
 
 .btn-group.select .btn {
