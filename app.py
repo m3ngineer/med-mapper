@@ -25,7 +25,8 @@ def results():
     npi_dict_16 = pickle.load(open('src/npi_2016.pkl', 'rb'))
 
     #get current year test data by target drug (currently set to imbruvica)
-    X = clean_data('data/heme-onc_d_16.csv')
+    #X = clean_data('data/heme-onc_d_16.csv') #replaced with pickled clean data for efficiency
+    X = pickle.load(open('data/heme-onc_d_16_clean.pkl', 'rb'))
 
     #predict y values and probabilities of being a high prescriber
     predictions = clf.predict(X)
@@ -101,4 +102,4 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
 ])
 
 if __name__ == '__main__':
-    server.run(debug=True)
+    server.run(host="0.0.0.0", port=8000, debug=True)
