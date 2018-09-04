@@ -81,7 +81,7 @@
                 <div class="container text-center">
                     <h4 class="header-text">Find a physician's prescribing DNA</h4>
                     <p>
-                      Understanding the best way to utilize your sales force is crucial to maintaining market stature. With publicly-available data, med mappr can profile a physician's prescribing DNA and analyzes the drug marketplace to identify the best touchpoints and opportunities for your sales force to engage with physicians.
+                      Understanding the best way to utilize your sales force is crucial to maintaining market stature. With publicly-available data, med mappr can profile a physician's prescribing DNA and analyze the drug marketplace to identify the best opportunities for your sales force to engage with physicians.
                     </p>
                     <p>
                       We seek to answer some of these questions:
@@ -101,13 +101,13 @@
                             <div class="description">
                                 <h4 class="header-text">Analysis of Oncology Prescribing Behavior</h4>
                                 <p>This project focuses on predicting top-prescribing physicians for oncology drugs. Using Imbruvica, an oral inhibitor of Bruton's tyrosine kinase for treatment of mantel cell lymphoma and chronic lymphocytic leukemia, I analyzed Medicare claims data to build a gradient boosted classifier model that predicts whether a physician will be a top prescriber in the following year.</p>
-                                <p>Try to make it very clear for the people browsing the page that this product will enrich their life and will make a nice addition to the homescreen.
+                                <p>To the right is a representative heatmap of the prescribing patterns of physicians who prescribe Imbruvica with correlated (left) and uncorrelated (right) drugs
                                 <p>
                             </div>
                         </div>
                         <div class="col-md-5 hidden-xs">
                             <!-- add a plot here -->
-                            <img src='static/img/total_claims_imbr.png' style='position: relative; top: 130px; left: 100px; width: 300px; height: 300px;'>
+                            <img src='static/img/imbruv_heatmap_select.png' style='position: relative; top: 60px; left: 20px; width: 450px; height: 450px;'>
 
                         </div>
                     </div>
@@ -119,20 +119,21 @@
                         <div class="col-md-6">
 
                           <!-- add a plot here -->
-                          <img src='static/img/total_claims_imbr.png' style='position: relative; top: 0px; left: 100px; width: 300px; height: 300px;'>
+                          <img src='static/img/imbruv_scatter_kmeans.png' style='position: relative; top: 20px; left: 20px; width: 450px; height: 450px;'>
 
                         </div>
                         <div class="col-md-5 col-md-offset-1">
-                            <h4 class="header-text">Interesting features</h4>
+                            <h4 class="header-text">Segmenting Physician Subtypes</h4>
                             <p>
-                                Variation of prescribing patterns by state
+                                To the left is an example plot of Imbruvica-prescribing physician segments. Marker sizes represent number of claims for Imbruvica.
+                                <!-- Variation of prescribing patterns by state
                                 Hierarchical clustering of provider prescribing patterns
                                 t-SNE plots of
                                 Heatmap of prescribing patterns
                                 create matrix of npis x claims per drug
-                                set claims < 11 --> 0
+                                set claims < 11 -> 0 -->
                             </p>
-                            <a href="http://www.creative-tim.com/product/awesome-landing-page" id="Demo3" class="btn btn-fill btn-info" data-button="info">Get Free Demo</a>
+                            <!-- <a href="http://www.creative-tim.com/product/awesome-landing-page" id="Demo3" class="btn btn-fill btn-info" data-button="info">Get Free Demo</a> -->
                         </div>
                     </div>
                 </div>
@@ -144,51 +145,20 @@
                         <img class ="parallax-background-image" src="static/assets/img/template/bg3.jpg"/>
                     </div>
                     <div class="info">
-                        <h1>Download this landing page for free!</h1>
-                        <p>Beautiful multipurpose bootstrap landing page.</p>
-                        <a href="http://www.creative-tim.com/product/awesome-landing-page" class="btn btn-neutral btn-lg btn-fill">DOWNLOAD</a>
+                        <h1></h1>
+                        <p></p>
+                        <!-- <a href="http://www.creative-tim.com/product/awesome-landing-page" class="btn btn-neutral btn-lg btn-fill">DOWNLOAD</a> -->
                     </div>
                 </div>
             </div>
             <footer class="footer">
                 <div class="container">
                     <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <a href="#">
-                                Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                Company
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                Portfolio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                Blog
-                                </a>
-                            </li>
-                        </ul>
                     </nav>
-                    <div class="social-area pull-right">
-                        <a class="btn btn-social btn-facebook btn-simple">
-                        <i class="fa fa-facebook-square"></i>
-                        </a>
-                        <a class="btn btn-social btn-twitter btn-simple">
-                        <i class="fa fa-twitter"></i>
-                        </a>
-                        <a class="btn btn-social btn-pinterest btn-simple">
-                        <i class="fa fa-pinterest"></i>
-                        </a>
-                    </div>
                     <div class="copyright">
-                        &copy; 2016 <a href="http://www.creative-tim.com">Creative Tim</a>, made with love
+                        &copy; 2018 <a href="http://engmatthew.com">Matthew Eng</a>
+                        <br>
+                        Template created by <a href="http://www.creative-tim.com">Creative-Tim</a>
                     </div>
                 </div>
             </footer>
