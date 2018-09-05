@@ -69,8 +69,12 @@
 
                                   </select>
 
-                                  <input type="submit" value="Get Results" class="btn btn-fill btn-neutral btn-lg" style="position:relative; right:-60px;">
+                                  <input type="submit" id="submit_btn" value="Get Results" class="btn btn-fill btn-neutral btn-lg" style="position:relative; right:-60px;">
                                 </form>
+
+                                <div id="loading" style="display: none" >
+                                  <div>Loading results</div>
+                                </div>
 
                             </div>
                         </div>
@@ -169,4 +173,14 @@
     <script src="static/assets/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
     <script src="static/assets/js/bootstrap.js" type="text/javascript"></script>
     <script src="static/assets/js/awesome-landing-page.js" type="text/javascript"></script>
+
+    <?php
+    $form->form_params->set('jsvalidation_onValidateSuccess', 'showLoader');
+    ?>
+
+    <script type="text/javascript">
+    $('loading').setStyle('display', 'block');
+    $('submit_btn').disabled = true;
+    };
+      </script>
 </html>

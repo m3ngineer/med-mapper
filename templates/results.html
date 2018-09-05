@@ -35,6 +35,11 @@
             text-align: center;
         }
 
+        .content-overflow {
+             max-height:650px;
+             overflow-y:auto;
+         }
+
         #prescriber-info thead {
           cursor: pointer;
         }
@@ -91,31 +96,32 @@
                   <p>
                       Displayed are prescribers who are most likely to be top prescribing physicians of {{ selection }}. This information is based on 2015 Medicare data predicted for 2016. <br>
                   </p>
-
-                  <table id='prescriber-info' style='margin: 0 auto; padding: 20px;'>
-                    <thead>
-                      <tr style='border-bottom: 1px solid #ddd;'>
-                        <th><span>NPI</span></th>
-                        <th><span>Last Name</span></th>
-                        <th><span>First Name</span></th>
-                        <th><span>City</span></th>
-                        <th><span>State</span></th>
-                        <th><span>Specialty</span></th>
-                        <th><span>Zipcode</span></th>
-                        <th><span>Confidence</span></h>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for key, value_dict in hp_dict.items() %}
-                         <tr style='border-bottom: 1px solid #ddd; padding: 5px;'>
-                              <td> {{ key }} </td>
-                              {% for element in value_dict.values() %}
-                              <td> {{ element }} </td>
-                              {% endfor %}
-                         </tr>
-                      {% endfor %}
-                    </tbody>
-                  </table>
+                  <div class='content-overflow'>
+                    <table id='prescriber-info' style='margin: 0 auto; padding: 20px;'>
+                      <thead>
+                        <tr style='border-bottom: 1px solid #ddd;'>
+                          <th><span>NPI</span></th>
+                          <th><span>Last Name</span></th>
+                          <th><span>First Name</span></th>
+                          <th><span>City</span></th>
+                          <th><span>State</span></th>
+                          <th><span>Specialty</span></th>
+                          <th><span>Zipcode</span></th>
+                          <th><span>Confidence</span></h>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for key, value_dict in hp_dict.items() %}
+                           <tr style='border-bottom: 1px solid #ddd; padding: 5px;'>
+                                <td> {{ key }} </td>
+                                {% for element in value_dict.values() %}
+                                <td> {{ element }} </td>
+                                {% endfor %}
+                           </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
 
               </div>
 
@@ -192,8 +198,6 @@
                 });
             }
           );
-
-
     </script>
 
 
