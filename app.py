@@ -50,7 +50,7 @@ def results():
     graphJSON = show_map(hp_dict)
 
     # Generate cohort statistics
-    cohort_stats = get_cohort_stats(high_prob_npis, 'data/heme-onc_d_16.csv')
+    cohort_stats = get_cohort_stats(high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv')
 
     if request.method == 'POST':
 
