@@ -1,16 +1,18 @@
 # Med Mapper
 
 ## Translating claims data into pharmaceutical sales intelligence
-The product marketplace is consistently in flux. Med Mappr is a data product that provides intelligence to help pharmaceutical companies stay ahead of competition. This product supports early product adoption by helping to identify physician engagement opportunities and prioritize use of sales forces.
+In an age of fierce pharmaceutical competition, increasing pressure to deliver more within budget, and swift regulatory changes, pharmaceutical companies are tasked with getting their product to patients quickly and in a targeted manner. Marketing executives are seeking intelligence that will help them make better decisions on how and where to target their sales and marketing resources.
+
+Med Mappr is a data product that provides intelligence to help pharmaceutical companies stay ahead of their competition. This product supports early product adoption by helping to identify physician engagement opportunities and prioritize use of sales forces and marketing resources. Med mappr was made to optimize promotions by pinpointing the correct physicians and segmenting your customer base.
 
 ## Unlocking physician prescribing patterns in oncology
 Currently, this project focuses on predicting top-prescribing physicians for oncology drugs. Focusing on Imbruvica, an oral inhibitor of Bruton's tyrosine kinase indicated for the treatment of mantel cell lymphoma and chronic lymphocytic leukemia, I analyzed Medicare claims data to build a gradient boosted classifier model that predicts whether a physician will be a top prescriber in the following year.
 
-This model is then used on the latest release of Medicare claims data to recommend physicians that pharmaceutical sales forces should prioritize engagement with.
+This model uses the latest release of Medicare claims data to recommend physicians that pharmaceutical sales forces should prioritize engagement with.
 
 In order to identify physicians who may be more amenable to changing prescriptions, the prescribing patterns from recommended physicians were further analyzed by clustering.
 
-## Solution
+## Product demonstration
 Users are able to select their drug of interest.
 
 <img src="/static/img/med-mappr_landing.png" alt="Med Mappr landing page" width="600"/>
@@ -50,14 +52,27 @@ Medicare detailed provider data consisted of 21 variables organized by a unique 
 Medicare NPI summary tables consisted of 89 variables overall drug utilization information organized by NPI. Data from these tables included total claims, brand and generic drug costs, and beneficiary demographic statistics.
 
 ### Data processing and feature selection
-Data was processed using pandas and numpy.
+Data was processed using pandas and numpy. Altogether there were 104 unique variables from Medicare data, and an additional 13 income and population density variables sorted geographically by zipcode.
+
+As data from physicians prescribing with 1-10 counts of a drug were suppressed in the Medicare Part D claims dataset, these empty values were substituted with random integers between 1-10. Non-numerical variables (eg, address, state), with the exception of NPPES specialty, and suppression flags (denoting Medicare suppression of data from physicians with less than 10 counts of a drug) were excluded for modeling purposes. NPPES specialty was collapsed into categorical variables consisting of 'MD', 'MD plus' for physicians with additional advanced degrees beyond an MD, 'NP', 'RN', 'PA', and 'Other'. Zip codes were replaced with income and population density data.
+
+Total claim count was used as the metric for identifying high-prescribing physicians. Providers were classified as a high prescriber if they were in the top quantile of providers.
 
 ### Modeling
+Modeling was performed using logistic regression, random forest, and gradient boosted classifier using scikit-learn. F1 score, recall, and precision were used as metrics to evaluate and optimize models. Gradient boosted classification model was chosen based on superior scores with 5 K-fold cross validation.
+
+Features were iteratively dropped based on sci-kit learn's feature importances and cross-validating scores without the least important features.
 
 ### Data Analysis
+Coming soon.
 
 ### Deployment
+Med Mappr algorithm and web app were deployed with a Flask microframework. App is running on an AWS EC2 instance.
 
 ## Results
+Coming soon.
 
 ## Future work
+ - Physician early adopter score
+ - Connections between provider organizations
+ - Identify thought leaders
