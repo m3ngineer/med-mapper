@@ -18,15 +18,20 @@ def home():
 @server.route('/results', methods=['GET', 'POST'])
 def results():
 
+    if request.method == 'POST':
+
+        selection = request.form['selection']
+
     #load model
-    clf = pickle.load(open('src/model_imbruvica.pkl', 'rb'))
+    filename = 'src/model_' + selection.lower() + '.pkl'
+    clf = pickle.load(open(filename, 'rb'))
 
     #load npi_dictionary for 2016
-    npi_dict_16 = pickle.load(open('src/npi_2016.pkl', 'rb'))
+    npi_dict_16 = pickle.load(open('src/dashboard/npi_2016.pkl', 'rb'))
 
     #get current year test data by target drug (currently set to imbruvica)
     #X = clean_data('data/heme-onc_d_16.csv') #replaced with pickled clean data for efficiency
-    X = pickle.load(open('data/heme-onc_d_16_clean.pkl', 'rb'))
+    X = pickle.load(open('src/dashboard/data_heme-onc_d_16_clean.pkl', 'rb'))
 
     #predict y values and probabilities of being a high prescriber
     predictions = clf.predict(X)
@@ -47,17 +52,17 @@ def results():
             hp_dict[npi]['prob'] = "{:.2f}%".format(prob_hp_dict[npi] * 100)
 
     # Create map visualizing zipcodes of predicted prescribers
-    graphJSON = show_map(hp_dict)
+    # graphJSON = show_map(hp_dict)
+    filename = 'src/dashboard_graphJSON_17_' + selection.lower() + '.pkl'
+    graphJSON = pickle.load(open(filename, 'rb')) # Predicted for Imbruvica 2017
 
     # Generate cohort statistics
-    cohort_stats = get_cohort_stats(high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv')
-
-    if request.method == 'POST':
-
-        selection = request.form['selection']
+    # cohort_stats = get_cohort_stats(high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv')
+    filename = 'src/dashboard_cohort_stats_17_' + selection.lower() + '.pkl'
+    cohort_stats = pickle.load(open('src/imbruvica_17_cohort_stats.pkl', 'rb'))
 
     return render_template('results.html',
-        selection='Imbruvica',
+        selection=selection,
         hp_dict=hp_dict,
         graphJSON=graphJSON,
         cohort_stats=cohort_stats

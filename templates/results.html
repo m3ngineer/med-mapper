@@ -80,7 +80,7 @@
                 <div class="collapse navbar-collapse" id="example" >
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">
+                            <a href="https://github.com/m3ngineer/med-mapper">
                             Find out more
                             </a>
                         </li>
@@ -130,7 +130,7 @@
               <div class="section section-presentation">
                   <div class="container">
                       <div class="row">
-                          <div class="col-md-5">
+                          <div class="col-md-5 section-gray">
                               <div class="description">
                                   <h4 class="header-text">Cohort Statistics</h4>
                                   <p>Altogether, this cohort had:  </p>
@@ -142,6 +142,7 @@
                                   <p>Altogether, this cohort represented:  </p>
                                   <h3>{{ cohort_stats[1][0] }}%</h3> of all Medicare claims for {{ selection }}<br>
                                   <h3>{{ cohort_stats[1][1] }}%</h3> of all Medicare spending on {{ selection }}<br>
+                                  <br />
                               </div>
                           </div>
                           <div class="col-md-7 hidden-xs">
@@ -154,6 +155,54 @@
                   </div>
               </div>
 
+          </div>
+
+          <div class="section section-presentation">
+              <div class="container">
+                  <div class="row">
+                      <div class="container text-center">
+                        <h4 class="header-text">Shifts in prescribing trends</h4>
+                        <p>
+                            Changes in physician prescribing trends for the recommended cohort can be used to describe patterns and trends in how product usage dynamically shifts. Depicted is a heatmap of the percent change in drugs known to be either competitive to co-prescribed with {{ selection }}.
+                        </p>
+
+                        <!-- add a plot here -->
+                        <img src='static/img/imbruv_cluster_map_perc_claim_change_1516_related_drugs.png' style='position: relative; top: 20px; left: 20px; width: 500px; height: 500px;'>
+
+                        <p>
+                          Providers often prescribe allopurinol before treatment with Imbruvica to prevent gout, which Imbruvica can increase risk of.
+                          Venclexta + rituximab are also prescribed for CLL/SLL.
+                          Rituximab is also approved for use with Imbruvica.
+                        </p>
+                        <p>
+                          Heatmap was generated using hierarchical clustering of drugs known to be related to {{ selection }}.
+                        </p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="section section-presentation">
+              <div class="container">
+                  <div class="row">
+                    <div class="container text-center">
+                      <h4 class="header-text">Cohort prescribing trends compared to average</h4>
+                      <p>
+                          Ratios between drugs can provide a comparison of how often a drug is prescribed compared to competitor and commonly co-prescribed products. Ratios between claims of {{ selection }} and its related products are shown below.
+                      </p>
+
+                      <img src='static/img/imbruv_ratios.png' style='position: relative; top: 20px; left: 20px; width: 600px; height: 600px;'>
+
+                      <p>
+                        Several differences in prescribing patterns are observed between recommended providers and the average presriber.
+                        For instance, high prescribers of Imbruvica have a lower ratio of Imbruvica : Rituxan, a commonly co-prescribed regimen. This suggests that Rituxan is commonly being prescribed with Imbruvica in this population.
+                      </p>
+                      <p>
+                        Another example is Venclexta, a competitor of Imbruvica, also indicated for CLL. The ratio of Imbruvica : Venclexta is increased in high prescribers compared to all prescribers of Imbruvica, suggesting that there is market opportunity to engage with and convert prescribers of Venclexta to Imbruvica.
+                      </p>
+                    </div>
+                  </div>
+              </div>
           </div>
 
             <footer class="footer">
