@@ -10,6 +10,19 @@ This model is then used on the latest release of Medicare claims data to recomme
 
 In order to identify physicians who may be more amenable to changing prescriptions, the prescribing patterns from recommended physicians were further analyzed by clustering.
 
+## Solution
+Users are able to select their drug of interest.
+
+<img src="/static/img/med-mappr_landing.png" alt="Med Mappr landing page" width="600"/>
+
+Med Mappr returns a list of recommended physicians who have been identified as likely to be high prescribers for the current year.
+
+<img src="/static/img/med-mappr_recommendations.png" alt="Med Mappr recommended physicians for Imbruvica" width="600"/>
+
+Users can survey overall statistics for recommended physicians compared to the all physicians who prescribe Imbruvica. Physicians are also visualized and segmented by location.
+
+<img src="/static/img/med-mappr_stats.png" alt="Med Mappr cohort statistics" width="600"/>
+
 Live app can be found [here](http://35.153.218.187/).
 
 ## About the data
