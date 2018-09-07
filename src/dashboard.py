@@ -62,7 +62,7 @@ def show_map(hp_dict):
             )]
 
     layout = dict(
-            #title = 'Locations of Predicted Physicians for Imbruvica',
+            #title = 'Locations of Predicted Physicians for drug',
             colorbar = False,
             autosize=True,
             width=500,
@@ -100,7 +100,72 @@ def show_map(hp_dict):
     # return py.iplot( fig, validate=False, filename='location_physicians' )
     return graphJSON # use this return for embedding in flask and above for ipython
 
-def get_cohort_stats(high_prob_npis, medicare_data):
+def show_specialty_hist(high_prob_npis, medicare_data, drug):
+    '''
+    Take in list of number of claims for each specialty ('Hematology-Oncology', 'Medical Oncology', 'Hematology')
+    Returns JSON for plotting histogram
+    '''
+
+    prescriber_data = pd.read_csv(medicare_data, delimiter='\t')
+
+    specialties = ['Hematology-Oncology', 'Medical Oncology', 'Hematology']
+
+    claims = []
+    for i, specialty in enumerate(specialties, 1):
+        claims_specialty = prescriber_data_16.loc[(prescriber_data['npi'].isin(high_prob_npis)) &
+                               (prescriber_data['drug_name'] == drug) &
+                               (prescriber_data['specialty_description'] == specialty),
+                               'total_claim_count'].values
+
+        claims.append(claims_specialty)
+
+    data = []
+    colors = [#'rgb(178,24,43)',
+     'rgb(214,96,77)',
+     #'rgb(244,165,130)',
+     #'rgb(253,219,199)',
+     #'rgb(209,229,240)',
+     'rgb(146,197,222)',
+     #'rgb(67,147,195)',
+     'rgb(33,102,172)']
+
+    for i, specialty_claims in enumerate(claims):
+        trace = go.Histogram(
+            x=specialty_claims,
+            #opacity=1,
+            name=specialties[i],
+            xbins=dict(
+                start=0,
+                end=156,
+                size=5
+            ),
+            autobinx=False,
+            marker=dict(
+                color=colors[i]
+            ),
+        )
+
+        data.append(trace)
+
+    updatemenus = list([
+        dict(type="buttons",
+             buttons=list([
+                dict(label = 'Stack',
+                     method = 'relayout',
+                     args = ['barmode', 'stack']),
+                dict(label = 'Overlay',
+                     method = 'relayout',
+                     args = ['barmode', 'overlay']),
+                ]),
+            )
+        ])
+
+    fig = dict( data=data, layout=layout )
+    histJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return histJSON
+
+def get_cohort_stats(high_prob_npis, medicare_data, drug):
     '''
     Input: Takes in npis for high_prescribing_doctors and medicare data for past year
     Output: Returns total spending for all of drug, and proportion sold by this group of high prescribing physicians
@@ -109,8 +174,8 @@ def get_cohort_stats(high_prob_npis, medicare_data):
     prescriber_data = pd.read_csv(medicare_data, delimiter='\t')
     cohort_stats = []
 
-    high_prescribers_target = prescriber_data[(prescriber_data['drug_name'] == 'IMBRUVICA') & (prescriber_data['npi'].isin(high_prob_npis))]
-    all_prescribers_target = prescriber_data[prescriber_data['drug_name'] == 'IMBRUVICA']
+    high_prescribers_target = prescriber_data[(prescriber_data['drug_name'] == drug) & (prescriber_data['npi'].isin(high_prob_npis))]
+    all_prescribers_target = prescriber_data[prescriber_data['drug_name'] == drug]
 
     # find summary percent greater statistics than mean
     hp_target_means = high_prescribers_target[['total_claim_count', 'nonlis_drug_cost', 'pdp_drug_cost', 'mapd_drug_cost', 'brand_drug_cost', 'generic_drug_cost', 'total_drug_cost']].mean()

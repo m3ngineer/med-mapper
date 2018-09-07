@@ -251,6 +251,12 @@ def drop_duplicate_SQL_cols(data_filename, write_to_filename):
     df.drop(drop_cols, axis=1, inplace=True)
     df.to_csv(write_to_filename, sep='\t')
 
+def get__high_prescriber_npis():
+    '''
+    Returns list of high prescribers
+    '''
+    pass
+
 class NewDrugModel:
     '''
     Input:
@@ -307,10 +313,14 @@ class NewDrugModel:
         self.graphJSON = show_map(self.high_prescriber_dict)
         print('Generating cohort statistics...')
         self.cohort_stats = get_cohort_stats(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
+        print('Generating JSON for histogram...')
+        self.histJSON = get_cohort_stats(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
 
         print('Exporting files...')
         filename_cs = 'src/dashboard/dashboard_cohort_stats_17_' + self.drug.lower() + '.pkl'
         filename_gj = 'src/dashboard/dashboard_graphJSON_17_' + self.drug.lower() + '.pkl'
+        filename_hj = 'src/dashboard/dashboard_histJSON_17_' + self.drug.lower() + '.pkl'
         pickle.dump(self.cohort_stats, open(filename_cs, 'wb'))
         pickle.dump(self.graphJSON, open(filename_gj, 'wb'))
+        pickle.dump(self.histJSON, open(filename_gj, 'wb'))
         print('Complete.')

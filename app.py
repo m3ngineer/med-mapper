@@ -21,9 +21,9 @@ def results():
     if request.method == 'POST':
 
         selection = request.form['selection']
-
+        print(selection)
     #load model
-    filename = 'src/model_' + selection.lower() + '.pkl'
+    filename = 'src/models/model_' + selection.lower() + '.pkl'
     clf = pickle.load(open(filename, 'rb'))
 
     #load npi_dictionary for 2016
@@ -53,13 +53,13 @@ def results():
 
     # Create map visualizing zipcodes of predicted prescribers
     # graphJSON = show_map(hp_dict)
-    filename = 'src/dashboard_graphJSON_17_' + selection.lower() + '.pkl'
+    filename = 'src/dashboard/dashboard_graphJSON_17_' + selection.lower() + '.pkl'
     graphJSON = pickle.load(open(filename, 'rb')) # Predicted for Imbruvica 2017
 
     # Generate cohort statistics
     # cohort_stats = get_cohort_stats(high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv')
-    filename = 'src/dashboard_cohort_stats_17_' + selection.lower() + '.pkl'
-    cohort_stats = pickle.load(open('src/imbruvica_17_cohort_stats.pkl', 'rb'))
+    filename = 'src/dashboard/dashboard_cohort_stats_17_' + selection.lower() + '.pkl'
+    cohort_stats = pickle.load(open(filename, 'rb'))
 
     return render_template('results.html',
         selection=selection,
