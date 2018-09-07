@@ -1,8 +1,15 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from src.dashboard import *
+import pickle
+from sklearn.ensemble import GradientBoostingClassifier
 
 def clean_data(filename):
+    '''
+    Input: Takes in the name of a file to clean data on for modeling
+    Output: Returns dataframe with relevant new features including total drug costs and total claim counts for select drugs, total costs of all drugs, and percent change in claims from 2014-2015 for select products, and income and population density data by zipcode.
+    '''
 
     print('Reading file...')
     data = pd.read_csv(filename, delimiter='\t')
@@ -42,7 +49,7 @@ def clean_data(filename):
     zip_data = zip_data.iloc[:,1:]  # drop unnamed column
     zip_data.drop(['agi', 'agi_stub', 'n_returns_wages', 'total_income_amt', 'n_return_total_inc', 'n_returns'], axis=1, inplace=True)
 
-    # rename Imbruvica zipcode5 column to merge with zipcode data
+    # rename zipcode5 column to merge with zipcode data
     data.rename(columns={'nppes_provider_zip5': 'zip'}, inplace=True)
 
     # merge zipcode demographic data and new features data into Medicare data
@@ -58,6 +65,10 @@ def clean_data(filename):
     return data
 
 def add_new_features(data):
+    '''
+    Input: Takes in dataframe of data to engineer
+    Output: Returns dataframe with new features including total drug costs and total claim counts for select drugs, total costs of all drugs, and percent change in claims from 2014-2015 for select products
+    '''
 
     #data.set_index('npi', inplace=True) #added this because index isn't npi when file read in
 
@@ -69,12 +80,6 @@ def add_new_features(data):
            'ZYTIGA', 'POMALYST', 'TASIGNA', 'SPRYCEL', 'IMATINIB MESYLATE',
            'TARCEVA', 'AFINITOR', 'PROMACTA', 'PROCRIT', 'JADENU', 'NEXAVAR',
            'NINLARO', 'SUTENT', 'XARELTO']
-
-
-    '''
-    partd_drugs = ['REVLIMID', 'IMBRUVICA', 'XTANDI',
-           'SPRYCEL', 'TARCEVA']
-    '''
 
     for drug in partd_drugs:
         features = data.loc[data['drug_name'] == drug, ['npi', 'total_drug_cost', 'total_claim_count']].set_index('npi')
@@ -127,7 +132,7 @@ def add_new_features(data):
     # Update column names before merging with other features
     drugs_greatest_change_cols = [drug + '_PCC' for drug in drugs_greatest_change]
     perc_delta_claims_1415.columns = drugs_greatest_change_cols
-    
+
     # Add in new claims percentage drug features
     hp_features = hp_features.join(perc_delta_claims_1415, how='left')
 
@@ -169,7 +174,7 @@ def get_high_prescribers(filename, drug, partb_d='d', cutoff=0.75):
 
     if partb_d == 'd':
         data = data[['npi', 'total_drug_cost', 'drug_name']]
-        data = data[data['drug_name'] == 'IMBRUVICA']
+        data = data[data['drug_name'] == drug]
     elif partb_d == 'b':
         pass
 
@@ -245,3 +250,67 @@ def drop_duplicate_SQL_cols(data_filename, write_to_filename):
 
     df.drop(drop_cols, axis=1, inplace=True)
     df.to_csv(write_to_filename, sep='\t')
+
+class NewDrugModel:
+    '''
+    Input:
+        Provide drug name as 'str'
+
+    Output:
+        Export model and dashboard data to 'src/model' and 'src/dashboard/'
+    '''
+
+    def __init__(self, drug_name):
+        self.drug = drug_name.upper()
+        self.NPI_dict = pickle.load(open('src/dashboard/npi_2016.pkl', 'rb'))
+        self.X_train = pickle.load(open('src/dashboard/data_heme-onc_d_15_clean.pkl', 'rb'))
+        self.X_test = pickle.load(open('src/dashboard/data_heme-onc_d_16_clean.pkl', 'rb'))
+        self.labels = get_high_prescribers('data/heme-onc_d_16.csv', drug_name.upper())
+        self.y_train = None
+        self.model = GradientBoostingClassifier()
+        self.clf = None
+        self.high_prob_npis = None
+        self.high_prescriber_dict = None
+
+    def fit(self):
+        self.X_train, self.y_train = get_Xy(self.X_train, self.labels)
+        self.clf = self.model.fit(self.X_train, self.y_train)
+
+        return self.clf
+
+    def export_model(self):
+        filename = 'src/models/model_' + self.drug.lower() + '.pkl'
+        pkl_model = open(filename, 'wb')
+        pickle.dump(self.clf, pkl_model)
+        pkl_model.close()
+
+    def export_dashboard_data(self, cutoff=0.75):
+        predictions = self.clf.predict(self.X_test)
+        prob_hp = self.clf.predict_proba(self.X_test)[:, 1]
+
+        # get npis that are high confidence high prescribers
+        self.high_prob_npis = self.X_test[prob_hp > cutoff].index.values
+
+        # Create dictionary of predicted high prescribers
+        self.high_prescriber_dict = {k: self.NPI_dict[k] for k in self.high_prob_npis}
+
+        # Include probabilities of high prescriber in dictionary
+        prob_hp_arr = np.concatenate([self.X_test.index.values.reshape(-1,1), prob_hp.reshape(-1,1)], axis=1)
+        prob_hp_dict = {npi_prob[0]: npi_prob[1] for npi_prob in prob_hp_arr}
+
+        for npi in self.high_prob_npis:
+            if npi in prob_hp_dict:
+                self.high_prescriber_dict[npi]['prob'] = "{:.2f}%".format(prob_hp_dict[npi] * 100)
+
+        # Export cohort stats and graphJSON in order to make app more efficient
+        print('Generating JSON data for graph...')
+        self.graphJSON = show_map(self.high_prescriber_dict)
+        print('Generating cohort statistics...')
+        self.cohort_stats = get_cohort_stats(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
+
+        print('Exporting files...')
+        filename_cs = 'src/dashboard/dashboard_cohort_stats_17_' + self.drug.lower() + '.pkl'
+        filename_gj = 'src/dashboard/dashboard_graphJSON_17_' + self.drug.lower() + '.pkl'
+        pickle.dump(self.cohort_stats, open(filename_cs, 'wb'))
+        pickle.dump(self.graphJSON, open(filename_gj, 'wb'))
+        print('Complete.')
