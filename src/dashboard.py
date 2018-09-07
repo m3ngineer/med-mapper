@@ -112,7 +112,7 @@ def show_specialty_hist(high_prob_npis, medicare_data, drug):
 
     claims = []
     for i, specialty in enumerate(specialties, 1):
-        claims_specialty = prescriber_data_16.loc[(prescriber_data['npi'].isin(high_prob_npis)) &
+        claims_specialty = prescriber_data.loc[(prescriber_data['npi'].isin(high_prob_npis)) &
                                (prescriber_data['drug_name'] == drug) &
                                (prescriber_data['specialty_description'] == specialty),
                                'total_claim_count'].values
@@ -160,10 +160,146 @@ def show_specialty_hist(high_prob_npis, medicare_data, drug):
             )
         ])
 
+    layout = go.Layout(barmode='stack', updatemenus=updatemenus)
     fig = dict( data=data, layout=layout )
     histJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return histJSON
+
+def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
+    '''
+    Take in list of number of claims for each specialty ('Hematology-Oncology', 'Medical Oncology', 'Hematology')
+    Returns JSON for plotting histogram
+    '''
+
+    # Load data
+    y1 = pd.read_csv(medicare_data_y1, delimiter='\t')
+    y2 = pd.read_csv(medicare_data_y2, delimiter='\t')
+
+    # Create pivot tables of NPI x Drug claim counts
+    y1_claims = y1.loc[:, ['npi', 'total_claim_count', 'drug_name']]
+    y1_claims_drugs = pd.pivot_table(y1_claims, index='npi', columns='drug_name', values='total_claim_count', fill_value=0)
+    y2_claims = y2.loc[:, ['npi', 'total_claim_count', 'drug_name']]
+    y2_claims_drugs = pd.pivot_table(y2_claims, index='npi', columns='drug_name', values='total_claim_count', fill_value=0)
+
+    # Create transformed table with difference in claims from 2015 to 2016
+    delta_claims_y1y2 = (((y2_claims_drugs + 1) - (y1_claims_drugs + 1)) / (y1_claims_drugs + 1))
+    delta_claims_y1y2.fillna(0, inplace=True)
+
+    # Plot ratios of Imbruvica prescriptions to other related drugs in high prescribers vs all prescribers
+
+    related_drugs_full = [
+                    "RITUXAN",
+                    "CYCLOPHOSPHAMIDE",
+                    "TREANDA",
+                    #"BENDEKA",
+                    "PREDNISONE",
+                    'DEXAMETHASONE',
+                    'NEUPOGEN',
+                    #'GAZYVA',
+                    'NEULASTA',
+                    'ZYDELIG',
+                    'VENCLEXTA',
+                    'LEUKERAN',
+                    'DOXORUBICIN HCL',
+                    #'DOXORUBICIN HCL LIPOSOME',
+                    'ALLOPURINOL'
+                  ]
+
+    labels = ('High prescribers', 'All prescribers')
+    data_avg = []
+    data_hp = []
+    for i, drug in enumerate(related_drugs_full[1:], 1):
+        data_avg.append(y2_claims_drugs.loc[:, drug.upper()].mean() / y2_claims_drugs.loc[:, drug].mean())
+        data_hp.append(y2_claims_drugs.loc[high_prob_npis, drug.upper()].mean() / y2_claims_drugs.loc[high_prob_npis, drug].mean())
+
+    #scale ratio data to be between 0 and 1 to fit on same graph
+    data_max = np.vstack((data_avg, data_hp)).max(axis=0)
+    data_avg_scale = data_avg / data_max
+    data_hp_scale = data_hp / data_max
+
+    ratio_avg = go.Bar(
+        x=related_drugs_full,
+        y=data_avg,
+        #text=data_avg,
+        textposition = 'auto',
+        marker=dict(
+            color='rgb(214,96,77)',
+            ),
+        opacity=0.9,
+        name='Average'
+    )
+
+    ratio_hp = go.Bar(
+        x=related_drugs_full,
+        y=data_hp,
+        #text=y2,
+        textposition = 'auto',
+        marker=dict(
+            color='rgb(33,102,172)',
+            ),
+        opacity=0.9,
+        name='Recommended'
+    )
+
+    ratio_avg_scale = go.Bar(
+        x=related_drugs_full,
+        y=data_avg_scale,
+        #text=data_avg,
+        textposition = 'auto',
+        marker=dict(
+            color='rgb(214,96,77)',
+            ),
+        opacity=0.9,
+        name='Average'
+    )
+
+    ratio_hp_scale = go.Bar(
+        x=related_drugs_full,
+        y=data_hp_scale,
+        #text=y2,
+        textposition = 'auto',
+        marker=dict(
+            color='rgb(33,102,172)',
+            ),
+        opacity=0.9,
+        name='Recommended'
+    )
+
+    updatemenus=list([
+        dict(
+            buttons=list([
+                dict(
+                    args=['visible', [True, True, False, False]],
+                    label='Normal Data',
+                    method='restyle'
+                ),
+                dict(
+                    args=['visible', [False, False, True, True]],
+                    label='Scaled Data',
+                    method='restyle'
+                )
+            ]),
+            direction = 'left',
+            pad = {'r': 10, 't': 10},
+            showactive = True,
+            type = 'buttons',
+            x = 0.1,
+            xanchor = 'left',
+            y = 1.1,
+            yanchor = 'top'
+        ),
+    ])
+
+    data = [ratio_avg, ratio_hp, ratio_avg_scale, ratio_hp_scale]
+
+    layout = go.Layout(updatemenus=updatemenus)
+
+    fig = dict( data=data, layout=layout)
+    ratioJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return ratioJSON
+
 
 def get_cohort_stats(high_prob_npis, medicare_data, drug):
     '''

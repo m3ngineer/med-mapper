@@ -314,13 +314,17 @@ class NewDrugModel:
         print('Generating cohort statistics...')
         self.cohort_stats = get_cohort_stats(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
         print('Generating JSON for histogram...')
-        self.histJSON = get_cohort_stats(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
+        self.histJSON = show_specialty_hist(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
+        print('Generating JSON for ratio bar graphs...')
+        self.histJSON = show_ratio_bars(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_15.csv', 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
 
         print('Exporting files...')
         filename_cs = 'src/dashboard/dashboard_cohort_stats_17_' + self.drug.lower() + '.pkl'
         filename_gj = 'src/dashboard/dashboard_graphJSON_17_' + self.drug.lower() + '.pkl'
         filename_hj = 'src/dashboard/dashboard_histJSON_17_' + self.drug.lower() + '.pkl'
+        filename_rj = 'src/dashboard/dashboard_ratioJSON_17_' + self.drug.lower() + '.pkl'
         pickle.dump(self.cohort_stats, open(filename_cs, 'wb'))
         pickle.dump(self.graphJSON, open(filename_gj, 'wb'))
-        pickle.dump(self.histJSON, open(filename_gj, 'wb'))
+        pickle.dump(self.histJSON, open(filename_hj, 'wb'))
+        pickle.dump(self.ratioJSON, open(filename_rj, 'wb'))
         print('Complete.')
