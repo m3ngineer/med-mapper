@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 import plotly
 import plotly.graph_objs as go # delete just for example code
@@ -152,13 +153,23 @@ def show_specialty_hist(high_prob_npis, medicare_data, drug):
              buttons=list([
                 dict(label = 'Stack',
                      method = 'relayout',
-                     args = ['barmode', 'stack']),
+                     args = ['barmode', 'stack']
+                     ),
                 dict(label = 'Overlay',
                      method = 'relayout',
-                     args = ['barmode', 'overlay']),
+                     args = ['barmode', 'overlay']
+                     ),
                 ]),
+            pad = {'r': 10, 't': 10},
+            showactive = True,
+            x = 1.25,
+            xanchor = 'right',
+            y = 0.7,
+            yanchor = 'top'
             )
         ])
+
+
 
     layout = go.Layout(barmode='stack', updatemenus=updatemenus)
     fig = dict( data=data, layout=layout )
@@ -168,8 +179,14 @@ def show_specialty_hist(high_prob_npis, medicare_data, drug):
 
 def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
     '''
-    Take in list of number of claims for each specialty ('Hematology-Oncology', 'Medical Oncology', 'Hematology')
-    Returns JSON for plotting histogram
+    Input:
+
+        high_prob_npis: list of recommended physician NPI
+        medicare_data_y1: filename of medicare data from previous year
+        medicare_data_y2: filename of medicare data from current year
+        drug: drug name
+    Output:
+        Returns JSON for plotting bar graphs of ratio of claims of drug to claims of related drugs
     '''
 
     # Load data
@@ -209,9 +226,11 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
     labels = ('High prescribers', 'All prescribers')
     data_avg = []
     data_hp = []
-    for i, drug in enumerate(related_drugs_full[1:], 1):
-        data_avg.append(y2_claims_drugs.loc[:, drug.upper()].mean() / y2_claims_drugs.loc[:, drug].mean())
-        data_hp.append(y2_claims_drugs.loc[high_prob_npis, drug.upper()].mean() / y2_claims_drugs.loc[high_prob_npis, drug].mean())
+    for i, related_drug in enumerate(related_drugs_full[1:], 1):
+        if y2_claims_drugs.loc[:, related_drug.upper()].mean() > 0:
+            if y2_claims_drugs.loc[high_prob_npis, related_drug.upper()].mean() > 0:
+                data_avg.append(y2_claims_drugs.loc[:, drug.upper()].mean() / y2_claims_drugs.loc[:, related_drug.upper()].mean())
+                data_hp.append(y2_claims_drugs.loc[high_prob_npis, drug.upper()].mean() / y2_claims_drugs.loc[high_prob_npis, related_drug.upper()].mean())
 
     #scale ratio data to be between 0 and 1 to fit on same graph
     data_max = np.vstack((data_avg, data_hp)).max(axis=0)
@@ -251,7 +270,8 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
             color='rgb(214,96,77)',
             ),
         opacity=0.9,
-        name='Average'
+        name='Average',
+        visible=False
     )
 
     ratio_hp_scale = go.Bar(
@@ -263,7 +283,8 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
             color='rgb(33,102,172)',
             ),
         opacity=0.9,
-        name='Recommended'
+        name='Recommended',
+        visible=False
     )
 
     updatemenus=list([
@@ -279,16 +300,16 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
                     label='Scaled Data',
                     method='restyle'
                 )
-            ]),
-            direction = 'left',
+        ]),
+            #direction = 'left',
             pad = {'r': 10, 't': 10},
             showactive = True,
             type = 'buttons',
-            x = 0.1,
-            xanchor = 'left',
-            y = 1.1,
+            x = 1.25,
+            xanchor = 'right',
+            y = 0.75,
             yanchor = 'top'
-        ),
+            ),
     ])
 
     data = [ratio_avg, ratio_hp, ratio_avg_scale, ratio_hp_scale]

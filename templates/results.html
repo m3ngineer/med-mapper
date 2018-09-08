@@ -192,8 +192,8 @@
                           Ratios between drugs can provide a comparison of how often a drug is prescribed compared to competitor and commonly co-prescribed products. Ratios between claims of {{ selection }} and its related products are shown below.
                       </p>
 
-                      <!--<img src='static/img/imbruv_cluster_map_perc_claim_change_1516_related_drugs.png' style='position: relative; top: 20px; left: 20px; width: 600px; height: 600px;'> -->
-                      <div id='hist'></div>
+                      <img src='static/img/imbruv_cluster_map_perc_claim_change_1516_related_drugs.png' style='position: relative; top: 20px; left: 20px; width: 600px; height: 600px;'>
+
 
                       <p>
                         Several differences in prescribing patterns are observed between recommended providers and the average presriber.
@@ -216,8 +216,8 @@
                           Ratios between drugs can provide a comparison of how often a drug is prescribed compared to competitor and commonly co-prescribed products. Ratios between claims of {{ selection }} and its related products are shown below.
                       </p>
 
-                      <img src='static/img/imbruv_ratios.png' style='position: relative; top: 20px; left: 20px; width: 600px; height: 600px;'>
-
+                      <!-- <img src='static/img/imbruv_ratios.png' style='position: relative; top: 20px; left: 20px; width: 600px; height: 600px;'> -->
+                      <div id='ratio'></div>
                       <p>
                         Several differences in prescribing patterns are observed between recommended providers and the average presriber.
                         For instance, high prescribers of Imbruvica have a lower ratio of Imbruvica : Rituxan, a commonly co-prescribed regimen. This suggests that Rituxan is commonly being prescribed with Imbruvica in this population.
@@ -271,7 +271,7 @@
           hists.data,
           hists.layout, {displayModeBar: false, scrollZoom: false});
 
-          var ratio = {{graphJSON | safe}};
+          var ratio = {{ratioJSON | safe}};
 
         Plotly.plot('ratio',
           ratio.data,

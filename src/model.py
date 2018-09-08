@@ -316,7 +316,7 @@ class NewDrugModel:
         print('Generating JSON for histogram...')
         self.histJSON = show_specialty_hist(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
         print('Generating JSON for ratio bar graphs...')
-        self.histJSON = show_ratio_bars(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_15.csv', 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
+        self.ratioJSON = show_ratio_bars(self.high_prob_npis, 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_15.csv', 'https://s3.amazonaws.com/medmappr-data/heme-onc_d_16.csv', self.drug)
 
         print('Exporting files...')
         filename_cs = 'src/dashboard/dashboard_cohort_stats_17_' + self.drug.lower() + '.pkl'
