@@ -64,12 +64,18 @@ def results():
     # Create histogram of claims per specialty
     filename = 'src/dashboard/dashboard_histJSON_17_' + selection.lower() + '.pkl'
     histJSON = pickle.load(open(filename, 'rb'))
+
+    # Create bar graphs of ratios between drug claims and claims of related drugs
+    filename = 'src/dashboard/dashboard_ratioJSON_17_' + selection.lower() + '.pkl'
+    ratioJSON = pickle.load(open(filename, 'rb'))
+
     return render_template('results.html',
         selection=selection,
         hp_dict=hp_dict,
         graphJSON=graphJSON,
         cohort_stats=cohort_stats,
-        histJSON=histJSON
+        histJSON=histJSON,
+        ratioJSON=ratioJSON
         )
 
 # Dash app ------------------
