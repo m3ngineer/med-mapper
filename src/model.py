@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from src.dashboard import *
 import pickle
 from sklearn.ensemble import GradientBoostingClassifier
+from uszipcode import ZipcodeSearchEngine
 
 def clean_data(filename):
     '''
@@ -200,9 +201,9 @@ def plot_feature_importances(model, data):
 def plot_prescribing_characteristics():
     pass
 
-def create_dictionary_npis(filename):
+def create_dictionary_npis(filename, output_filename):
     '''
-    Input: Takes in raw csv file of providers ('data/heme-onc_d_15.csv')
+    Input: Takes in raw csv file of providers ('data/heme-onc_d_15.csv') and filename to output to
 
     Ouptut: Returns a dictionary of npi, provider information, zipcode and
     '''
@@ -210,6 +211,21 @@ def create_dictionary_npis(filename):
     df = pd.read_csv(filename, delimiter='\t')
     df = df[['npi', 'nppes_provider_last_org_name', 'nppes_provider_first_name',
        'nppes_provider_city', 'nppes_provider_state', 'specialty_description', 'nppes_provider_zip5']]
+
+    # Create new col of zipcode densities
+    search = ZipcodeSearchEngine()
+    # Make dataframe with densities for each zipcode
+    zip_info_values_dict = df['nppes_provider_zip5'].apply(search.by_zipcode).values
+    densities = np.array([[v['Zipcode'], v['Density']] for v in zip_info_values_dict])
+    densities = pd.DataFrame(densities, columns=['nppes_provider_zip5', 'density'])
+    densities['nppes_provider_zip5'] = densities['nppes_provider_zip5'].astype('int')
+    densities['density'] = densities['density'].astype('float')
+    # Merge zipcode densities into dataframe and get rural tags
+    df = pd.merge(df, densities, on='nppes_provider_zip5', how='left')
+    df['Tag'] = 'None'
+    df.loc[df['density'] <= 1000.0, 'Tag'] = 'RURAL'
+
+    # Rename dictionaries
     df.rename(columns={'nppes_provider_city': 'city', 'nppes_provider_first_name': 'first_name', 'nppes_provider_last_org_name': 'last_name', 'nppes_provider_state': 'state', 'nppes_provider_zip5': 'zip', 'specialty_description': 'speciality'}, inplace=True)
     df.drop_duplicates(inplace=True)
     df.set_index('npi', inplace=True)

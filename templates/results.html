@@ -106,18 +106,20 @@
                           <th><span>City</span></th>
                           <th><span>State</span></th>
                           <th><span>Specialty</span></th>
-                          <th><span>Zipcode</span></th>
+                          <th><span>Tag</span></th>
                           <th><span>Confidence</span></h>
+                          <th><span>Zipcode</span></th>
                         </tr>
                       </thead>
                       <tbody>
                         {% for key, value_dict in hp_dict.items() %}
                            <tr style='border-bottom: 1px solid #ddd; padding: 5px;'>
                                 <td> {{ key }} </td>
-                                {% for element in value_dict.values() %}
-                                <td> {{ element }} </td>
+                                {% for element_key, element_val in value_dict.items() if element_key != 'density' %}
+                                <td> {{ element_val }} </td>
                                 {% endfor %}
                            </tr>
+
                         {% endfor %}
                       </tbody>
                     </table>

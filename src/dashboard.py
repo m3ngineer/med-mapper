@@ -18,6 +18,7 @@ def create_zipcode_df(hp_dict):
     names = []
     npis = []
     names_zips = []
+    densities = []
 
     search = ZipcodeSearchEngine()
 
@@ -28,8 +29,9 @@ def create_zipcode_df(hp_dict):
         npis.append(npi)
         names.append(hp_dict[npi]['last_name'] + ', ' + hp_dict[npi]['first_name'])
         names_zips.append(hp_dict[npi]['last_name'] + ', ' + hp_dict[npi]['first_name'] + ', ' + str(hp_dict[npi]['zip']))
+        densities.append(search.by_zipcode(hp_dict[npi]['zip']).Density)
 
-    zipcode_df = pd.DataFrame({'npi': npis, 'name': names, 'zip': zips, 'name_zip': names_zips, 'latitude': lats, 'longitude': longs})
+    zipcode_df = pd.DataFrame({'npi': npis, 'name': names, 'zip': zips, 'name_zip': names_zips, 'latitude': lats, 'longitude': longs, 'density': densities})
 
     return zipcode_df
 

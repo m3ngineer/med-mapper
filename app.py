@@ -27,7 +27,7 @@ def results():
     clf = pickle.load(open(filename, 'rb'))
 
     #load npi_dictionary for 2016
-    npi_dict_16 = pickle.load(open('src/dashboard/npi_2016.pkl', 'rb'))
+    npi_dict_16 = pickle.load(open('src/dashboard/npi_2016_density.pkl', 'rb'))
 
     #get current year test data by target drug (currently set to imbruvica)
     #X = clean_data('data/heme-onc_d_16.csv') #replaced with pickled clean data for efficiency
@@ -50,6 +50,10 @@ def results():
     for npi in high_prob_npis:
         if npi in prob_hp_dict:
             hp_dict[npi]['prob'] = "{:.2f}%".format(prob_hp_dict[npi] * 100)
+            if hp_dict[npi]['density'] <= 1000.0:
+                hp_dict[npi]['tag'] = 'Rural'
+            else:
+                hp_dict[npi]['tag'] = 'None'
 
     # Create map visualizing zipcodes of predicted prescribers
     # graphJSON = show_map(hp_dict)
