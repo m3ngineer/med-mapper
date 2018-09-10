@@ -1,7 +1,7 @@
 # Med Mapper
 
 ## Translating claims data into pharmaceutical sales intelligence to improve physician education
-As new cancer therapies are approved by the FDA, patients have better therapies which available for treatment. Some of these treatments can improve survival by 10-20% over traditional therapies. However, busy doctors may be strained to find time to research the latest drugs and find the best drug for their patient.
+As new cancer therapies are approved by the FDA, patients have better therapies which available for treatment. Some of these treatments can significantly improve patient survival and quality of life over traditional therapies. However, busy, overworked doctors may be strained to find time to research the latest drugs and find the best drug for their patient.
 
 Pharmaceutical companies assist in this manner by using their field medical and sales teams to engage with physicians and provide the latest clinical information. However, with greater than 14,000 hematologist and oncologists in the U.S., sales and marketing executives are tasked with determining how to best utilize their sales and marketing resources quickly and effectively.
 
@@ -91,8 +91,12 @@ Physicians were also ordered using hierachical clustered of their percent change
 
 Interestingly, a subset of providers who showed increased claims of Imbruvica also showed increased rates of allopurinol claims. Providers often prescribe allopurinol before treatment with Imbruvica to prevent gout, which Imbruvica can increase risk of. Zydelig is also approved for use with chronic lymphocytic leukemia. Clustering analysis depicted several subsets of doctors who showed higher claim rates for Zydelig compared to Imbruvica, and may have opted for this treatment. Rituxan is approved for combination therapy with Imbruvica, however corresponding changes in claims were not observed with Rituxan. This may be because Rituxan is already commonly prescribed by oncologists.
 
+## Conclusion
+Med Mappr represents a proof of concept for how prescribing behavior can be inferred from Medicare claims data, while complying with HIPAA patient privacy regulations.
 
 ## Future work
 Additional features are in progress to improve this project.
+ - **Expanding models to encompass other cancer drugs:** Models have been created for Imbruvica, Xarelto, Ibrance, and Revlimid. Creating additional models will improve the utility and applicability of this product to additional markets.
+ - **Adding additional data:** This study primarily used Medicare claims data from 2014-2016. Using future releases of claims data from CMS, integrating Medicare Part B data, and adding more granular prescribing data from other data sets would help increase the predictive power of these models.
  - **Physician early adopter score:** Currently, this model provides a list of recommended physicians who are early adopters and are in rural areas. A composite score taking in other information could be useful in prioritizing physicians to engage with.
  - **Physician network:** Physicians can find out about new therapeutics from other doctors. Connections between provider organizations as inferred from research databases can be used to provide recommendations on influencer physicians.
