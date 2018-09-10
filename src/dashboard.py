@@ -169,9 +169,14 @@ def show_specialty_hist(high_prob_npis, medicare_data, drug):
             )
         ])
 
-
-
-    layout = go.Layout(barmode='stack', updatemenus=updatemenus)
+    layout = go.Layout(barmode='stack',
+                       updatemenus=updatemenus,
+                       xaxis=dict(
+                        title='Total Number of Claims'
+                       ),
+                       yaxis=dict(
+                        title='Number of Providers')
+                       )
     fig = dict( data=data, layout=layout )
     histJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -314,7 +319,12 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
 
     data = [ratio_avg, ratio_hp, ratio_avg_scale, ratio_hp_scale]
 
-    layout = go.Layout(updatemenus=updatemenus)
+    ytitle = 'Ratio ' + drug.capitalize() + ' : Drug'
+    layout = go.Layout(updatemenus=updatemenus,
+                       xaxis=dict(),
+                       yaxis=dict(
+                        title=ytitle)
+    )
 
     fig = dict( data=data, layout=layout)
     ratioJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
