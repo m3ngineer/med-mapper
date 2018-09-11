@@ -40,6 +40,20 @@
              overflow-y:auto;
          }
 
+         .cohort-stats {
+             overflow: hidden;
+             width: 100%;
+             min-height: 400px;
+             margin-top: 30px;
+          }
+
+          .map-section {
+              overflow: hidden;
+              width: 100%;
+              min-height: 450px;
+              margin-top: 30px;
+           }
+
         #prescriber-info thead {
           cursor: pointer;
         }
@@ -127,37 +141,47 @@
 
               </div>
 
-              <!--<div id='chart' class='chart'></div>-->
-
-              <div class="section section-presentation">
+              <div class="section map-section">
                   <div class="container">
                       <div class="row">
-                          <div class="col-md-5 section-gray">
-                              <div class="description">
-                                  <h4 class="header-text">Cohort Statistics</h4>
-                                  <p>Altogether, this cohort had:  </p>
-                                  <h3>{{ cohort_stats[0][0] }}%</h3> more claims for {{ selection }}<br>
-                                  <h3>{{ cohort_stats[0][6] }}%</h3> greater spend on {{ selection }} <br>
-                                  <h3>{{ cohort_stats[0][0] }}%</h3> greater spend on all brand drugs <br>
-                                  <p>
-
-                                  <p>Altogether, this cohort represented:  </p>
-                                  <h3>{{ cohort_stats[1][0] }}%</h3> of all Medicare claims for {{ selection }}<br>
-                                  <h3>{{ cohort_stats[1][1] }}%</h3> of all Medicare spending on {{ selection }}<br>
-                                  <br />
+                          <div class="container text-center">
+                            <h4 class="header-text">Provider locations</h4>
+                            <p>
+                              Locations of recommended providers are pictured below by zipcode. In order to identify physicians who provide services in underserved areas, physicians who practice in rural zipcodes are highlighted in red.
+                            </p>
+                            <div class='description'></div>
+                              <div style="width: 600px; display: block; margin: 0 auto;">
+                                <div id='map' ></div>
                               </div>
                           </div>
-                          <div class="col-md-7 hidden-xs">
-                                <div class="description">
-                                <!-- map plot is here -->
-                                <h4 class="header-text">Prescriber Locations</h4>
-                                <div id='map'></div>
-                              </div>
                       </div>
                   </div>
               </div>
 
-          </div>
+              <div class="section cohort-stats section-gray">
+                  <div class="container">
+                      <div class="row">
+                          <div class="container text-center">
+                            <h4 class="header-text">Cohort Statistics</h4>
+                            <p>
+                              Below are statistics for how the cohort of recommended physicians compare to the average of all physicians who prescribed {{ selection }}.
+                            </p>
+                              <div class="col-md-5">
+                                <p>Altogether, this cohort had:  </p>
+                                <h3>{{ cohort_stats[0][0] }}%</h3> more claims for {{ selection }}<br>
+                                <h3>{{ cohort_stats[0][6] }}%</h3> greater spend on {{ selection }} <br>
+                                <h3>{{ cohort_stats[0][0] }}%</h3> greater spend on all brand drugs <br>
+                                <p>
+                              </div>
+                              <div class="col-md-7 hidden-xs">
+                                <p>Altogether, this cohort represented:  </p>
+                                <h3>{{ cohort_stats[1][0] }}%</h3> of all Medicare claims for {{ selection }}<br>
+                                <h3>{{ cohort_stats[1][1] }}%</h3> of all Medicare spending on {{ selection }}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
           <div class="section section-presentation">
               <div class="container">

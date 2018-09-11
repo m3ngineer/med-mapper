@@ -32,6 +32,8 @@ def create_zipcode_df(hp_dict):
         densities.append(search.by_zipcode(hp_dict[npi]['zip']).Density)
 
     zipcode_df = pd.DataFrame({'npi': npis, 'name': names, 'zip': zips, 'name_zip': names_zips, 'latitude': lats, 'longitude': longs, 'density': densities})
+    zipcode_df['rural'] = 0
+    zipcode_df.loc[zipcode_df['density'] <= 1000.0, 'rural'] = 1
 
     return zipcode_df
 
@@ -42,36 +44,40 @@ def show_map(hp_dict):
     '''
     zipcode_df = create_zipcode_df(hp_dict)
 
+    scl = [ [0,'rgb(214,96,77)'], [1,'rgb(33,102,172)'] ]
+
     data = [ dict(
             type = 'scattergeo',
             locationmode = 'USA-states',
             lon = zipcode_df['longitude'],
             lat = zipcode_df['latitude'],
-            #text = df['text'],
             mode = 'markers',
             ids=zipcode_df['zip'],
             text=zipcode_df['name_zip'],
             hoverinfo='text',
             marker = dict(
-                size = 8,
-                opacity = 0.6,
-                reversescale = True,
-                autocolorscale = False,
-                symbol = 'circle',
-                line = dict(
-                    width=1,
-                    color='rgba(102, 102, 102)'
-                )),
-            )]
+                        size = 8,
+                        opacity = 0.6,
+                        reversescale = True,
+                        autocolorscale = False,
+                        symbol = 'circle',
+                        line = dict(
+                            width=1,
+                            color='rgba(102, 102, 102)'
+                            ),
+                        colorscale = scl,
+                        color = zipcode_df['rural'])
+                )
+            ]
 
     layout = dict(
             #title = 'Locations of Predicted Physicians for drug',
             colorbar = False,
-            autosize=True,
-            width=500,
-            height=300,
+            autosize=False,
+            width=600,
+            height=475,
             margin = dict(
-                l=5,
+                l=10,
                 r=5,
                 b=0,
                 t=0,
