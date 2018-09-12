@@ -13,7 +13,10 @@ app = dash.Dash(__name__, server=server, url_base_pathname='/dummypath/')
 
 @server.route('/')
 def home():
-    return render_template('index.html')
+
+    ruralmapJSON = pickle.load(open('src/ruralmapJSON.pkl', 'rb'))
+
+    return render_template('index.html', ruralmapJSON=ruralmapJSON)
 
 @server.route('/results', methods=['GET', 'POST'])
 def results():
