@@ -44,7 +44,7 @@ def show_map(hp_dict):
     '''
     zipcode_df = create_zipcode_df(hp_dict)
 
-    scl = [ [0,'rgb(214,96,77)'], [1,'rgb(33,102,172)'] ]
+    scl = [ [0,'rgb(33,102,172)'], [1,'rgb(214,96,77)'] ]
 
     data = [ dict(
             type = 'scattergeo',
@@ -218,32 +218,32 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
 
     # Plot ratios of Imbruvica prescriptions to other related drugs in high prescribers vs all prescribers
 
-    related_drugs_full = [
+    related_drugs_full = ["IMBRUVICA",
                     "RITUXAN",
                     "CYCLOPHOSPHAMIDE",
                     "TREANDA",
-                    #"BENDEKA",
+                    "BENDEKA",
                     "PREDNISONE",
                     'DEXAMETHASONE',
                     'NEUPOGEN',
-                    #'GAZYVA',
+                    'GAZYVA',
                     'NEULASTA',
                     'ZYDELIG',
                     'VENCLEXTA',
                     'LEUKERAN',
                     'DOXORUBICIN HCL',
-                    #'DOXORUBICIN HCL LIPOSOME',
+                    'DOXORUBICIN HCL LIPOSOME',
                     'ALLOPURINOL'
                   ]
 
     labels = ('High prescribers', 'All prescribers')
     data_avg = []
     data_hp = []
-    for i, related_drug in enumerate(related_drugs_full[1:], 1):
+    for i, related_drug in enumerate(related_drugs_full, 0):
         if y2_claims_drugs.loc[:, related_drug.upper()].mean() > 0:
             if y2_claims_drugs.loc[high_prob_npis, related_drug.upper()].mean() > 0:
-                data_avg.append(y2_claims_drugs.loc[:, drug.upper()].mean() / y2_claims_drugs.loc[:, related_drug.upper()].mean())
-                data_hp.append(y2_claims_drugs.loc[high_prob_npis, drug.upper()].mean() / y2_claims_drugs.loc[high_prob_npis, related_drug.upper()].mean())
+                    data_avg.append(y2_claims_drugs.loc[:, related_drug].mean())
+                    data_hp.append(y2_claims_drugs.loc[high_prob_npis, related_drug].mean())
 
     #scale ratio data to be between 0 and 1 to fit on same graph
     data_max = np.vstack((data_avg, data_hp)).max(axis=0)
@@ -327,7 +327,7 @@ def show_ratio_bars(high_prob_npis, medicare_data_y1, medicare_data_y2, drug):
 
     data = [ratio_avg, ratio_hp, ratio_avg_scale, ratio_hp_scale]
 
-    ytitle = 'Ratio ' + drug.capitalize() + ' : Drug'
+    ytitle = 'Drug Claims'
     layout = go.Layout(updatemenus=updatemenus,
                        xaxis=dict(),
                        yaxis=dict(
