@@ -28,9 +28,9 @@ Users are able to select their drug of interest.
 
 <img src="/static/img/med-mappr_landing.png" alt="Med Mappr landing page" width="600"/>
 
-Med Mappr returns a list of recommended physicians who have been identified as likely to be high prescribers for the current year. These can be sorted and prioritized by different traits, including name, location, and specialty. Physicians have also been tagged as practicing in rural counties, and can be sorted accordingly.
+Med Mappr returns a list of recommended physicians who have been identified as likely to be high prescribers for the current year. These can be sorted and prioritized by different traits, including name, location, and specialty. Physicians have also been tagged as practicing in rural counties, and can be sorted accordingly. Below are demonstrated results when the cancer drug Imbruvica is selected.
 
-<img src="/static/img/med-mappr_recommendations.png" alt="Med Mappr recommended physicians for Imbruvica" width="600"/>
+<img src="/static/img/med-mappr_results_list.png" alt="Med Mappr recommended physicians for Imbruvica" width="600"/>
 
 Users can survey overall statistics for recommended physicians compared to the all physicians who prescribe Imbruvica. Physicians are also visualized and segmented by location.
 
