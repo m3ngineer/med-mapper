@@ -36,17 +36,17 @@ Users can survey overall statistics for recommended physicians compared to the a
 
 <img src="/static/img/med-mappr_results_stats.png" alt="Med Mappr cohort statistics" width="600"/>
 
-<img src="/static/img/med-mappr_results_map.png" alt="Med Mappr cohort statistics" width="600"/>
+<img src="/static/img/med-mappr_results_map.png" alt="Med Mappr provider locations" width="600"/>
 
-Users can view additional information about the breakdown of this cohort, including prescriptions based on specialty and claims for drugs that are co-prescribed and competitors of Imbruvica.
+Users can view additional information about the breakdown of this cohort, including prescriptions based on specialty and claims for drugs that are co-prescribed and competitors of Imbruvica for recommended and all Imbruvica-prescribing physicians.
 
-<img src="/static/img/med-mappr_results_specialty.png" alt="Med Mappr cohort statistics" width="600"/>
+<img src="/static/img/med-mappr_results_specialty.png" alt="Med Mappr claims by specialty" width="600"/>
 
-<img src="/static/img/med-mappr_results_claims.png" alt="Med Mappr cohort statistics" width="600"/>
+<img src="/static/img/med-mappr_results_claims.png" alt="Med Mappr claims of Imbruvica and related drugs" width="600"/>
 
 To understand more granular patterns of physician prescribing habits, a heat map visualizes recommended providers based on their change in claims from the previous year. Certain providers have show patterns of possible co-prescription with agents used to reduce side effects known to caused by Imbruvica or with competitor agents.    
 
-<img src="/static/img/med-mappr_results_heatmap.png" alt="Med Mappr cohort statistics" width="600"/>
+<img src="/static/img/med-mappr_results_heatmap.png" alt="Med Mappr heatmap of percent change in claims for Imbruvica and related drugs" width="600"/>
 
 
 ## About the data
