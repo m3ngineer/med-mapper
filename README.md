@@ -83,7 +83,7 @@ The percentage changes in number of claims for drugs that showed the greatest ab
 Total claim count data from 2016 was used as the metric for identifying high-prescribing physicians. Providers were classified as a high prescriber if they were in the top quantile of providers.
 
 ### Modeling
-Modeling was performed using logistic regression, random forest, and gradient boosted classifier using scikit-learn. F1 score, recall, and precision were used as metrics to evaluate and optimize models. Gradient boosted classification model was chosen based on superior scores with 5 K-fold cross validation.
+Modeling was performed using logistic regression, random forest, and gradient boosted classifier using scikit-learn. F1 score, recall, and precision were used as metrics to evaluate and optimize models. Gradient boosted classification model was chosen based on superior scores with 5-fold cross validation.
 
 Features were iteratively dropped based on sci-kit learn's feature importances and cross-validating scores without the least important features.
 
